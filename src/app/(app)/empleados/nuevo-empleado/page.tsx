@@ -1,11 +1,6 @@
-import React from 'react'
-import FormEmployees from '@/components/employees/FormEmployees'
+import EmployeeFormTemplate from "@/components/employees/templates/EmployeeFormTemplate";
+import React from "react";
 
 export default function page() {
-  return (
-    <>
-      <div>Pagina para crear empleado</div>
-      <FormEmployees />
-    </>
-  )
+  return <EmployeeFormTemplate formMode="CREATE" />;
 }
