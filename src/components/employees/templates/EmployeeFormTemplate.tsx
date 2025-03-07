@@ -32,8 +32,8 @@ export default function EmployeeFormTemplate({ formMode, id }: Props) {
       <div className="min-h-[70vh] w-full flex justify-center items-center">
         <ThreeDots
           visible={true}
-          height="100"
-          width="100"
+          height="80"
+          width="80"
           color="#FFEB3B"
           radius="9"
           ariaLabel="three-dots-loading"
@@ -45,7 +45,7 @@ export default function EmployeeFormTemplate({ formMode, id }: Props) {
   }
 
   return (
-    <div className="container mx-auto mt-10">
+    <div className="container mx-auto mt-10 p-4">
       <Title title={title} />
       <FormEmployees formMode={formMode} data={data?.data} />
     </div>

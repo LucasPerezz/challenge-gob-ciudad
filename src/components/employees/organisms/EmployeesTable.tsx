@@ -115,15 +115,15 @@ export default function EmployeesTable() {
   return (
     <div className="flex flex-col justify-start min-h-dvh gap-1">
       <div className="flex flex-col gap-8 w-full">
-        <div className="w-full flex gap-2 justify-between items-end">
+        <div className="w-full flex gap-2 lg:justify-between justify-end items-end">
           <Input
             placeholder="Buscar empleado por nombre o DNI..."
             value={searchEmployee ?? ""}
             onChange={(e) => setSearchEmployee(e.target.value)}
-            className="max-w-md"
+            className="max-w-md hidden lg:block"
           />
           <div className="flex gap-3 items-end">
-            <div className="flex flex-col gap-2 items-center">
+            <div className="md:flex flex-col gap-2 items-center hidden">
               <p className="text-sm font-semibold">Empleados por página</p>
               <Select onValueChange={(value) => setLimit(Number(value))}>
                 <SelectTrigger className="w-[180px]">

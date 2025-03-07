@@ -41,7 +41,7 @@ export default function Home() {
           priority
           onClick={() => router.push("/")}
         />
-        <p className="font-bold text-5xl">Sistema de gestion de empleados</p>
+        <p className="font-bold text-3xl md:text-4xl lg:text-5xl">Sistema de gestion de empleados</p>
         <Button
           className="bg-yellow-500 px-4 py-4 text-lg w-3xs hover:cursor-pointer"
           onClick={() => router.push("/empleados")}

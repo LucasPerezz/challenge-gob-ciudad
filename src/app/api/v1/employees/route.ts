@@ -55,8 +55,8 @@ const prisma = new PrismaClient();
  *                         format: date-time
  *                         example: "1970-05-29T00:00:00.000Z"
  *                       is_developer:
- *                         type: boolean
- *                         example: true
+ *                         type: int
+ *                         example: 1
  *                       description:
  *                         type: string
  *                         example: "Ingeniero y filántropo"
@@ -89,8 +89,20 @@ const prisma = new PrismaClient();
  *                   type: boolean
  *                   example: false
  *       500:
- *         description: Error en el servidor
+ *         description: No se pudo obtener la lista de empleados
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                   example: 500
+ *                 message:
+ *                   type: string
+ *                   example: "Ocurrió un error al obtener la lista de empleados. Inténtelo nuevamente más tarde."
  */
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const page = Number(searchParams.get("page")) || 1;
@@ -146,18 +158,18 @@ export async function GET(req: NextRequest) {
  *               dni:
  *                 type: string
  *                 example: "12345678"
- *               dateOfBirth:
+ *               date_of_birthday:
  *                 type: string
  *                 format: date
  *                 example: "1970-05-29"
- *               isDeveloper:
- *                 type: boolean
- *                 example: true
+ *               is_developer:
+ *                 type: int
+ *                 example: 1
  *               description:
  *                 type: string
  *                 example: "Ingeniero y filántropo"
  *     responses:
- *       201:
+ *       200:
  *         description: Empleado creado exitosamente
  *         content:
  *           application/json:
@@ -187,8 +199,8 @@ export async function GET(req: NextRequest) {
  *                       format: date-time
  *                       example: "1970-05-29T00:00:00.000Z"
  *                     is_developer:
- *                       type: boolean
- *                       example: true
+ *                       type: int
+ *                       example: 1
  *                     description:
  *                       type: string
  *                       example: "Ingeniero y filántropo"
@@ -197,7 +209,19 @@ export async function GET(req: NextRequest) {
  *                       format: date-time
  *                       example: "2025-03-06T08:57:03.073Z"
  *       500:
- *         description: Error en el servidor
+ *         description: No se pudo crear el empleado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                   example: 500
+ *                 message:
+ *                   type: string
+ *                   example: "No se pudo crear el empleado. Inténtelo nuevamente más tarde."
+ *
  */
 export async function POST(req: NextRequest) {
   try {
@@ -220,8 +244,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     return NextResponse.json({
       status: 500,
-      message: "Ocurrió un error en el servidor",
-      error,
+      message: "No se pudo crear el empleado. Inténtelo nuevamente más tarde.",
     });
   } finally {
     await prisma.$disconnect();

@@ -51,8 +51,8 @@ type ParamsProps = {
  *                       format: date
  *                       example: "1970-05-29T00:00:00.000Z"
  *                     is_developer:
- *                       type: boolean
- *                       example: true
+ *                       type: int
+ *                       example: 1
  *                     description:
  *                       type: string
  *                       example: "Ingeniero y filántropo"
@@ -65,9 +65,31 @@ type ParamsProps = {
  *                       format: date-time
  *                       example: "2025-03-06T08:57:03.073Z"
  *       404:
- *         description: Empleado no encontrado
+ *         description: Empleado no encontrado con el ID proporcionado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                   example: 404
+ *                 message:
+ *                   type: string
+ *                   example: "Empleado no encontrado"
  *       500:
- *         description: Error en el servidor
+ *         description: Error en el servidor al intentar actualizar el empleado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                   example: 500
+ *                 message:
+ *                   type: string
+ *                   example: "Ocurrió un error en el servidor"
  * */
 
 export async function GET(_req: NextRequest, { params }: any) {
@@ -102,12 +124,12 @@ export async function GET(_req: NextRequest, { params }: any) {
  * /api/v1/employees/{id}:
  *   put:
  *     summary: Actualiza los detalles de un empleado por ID
- *     description: Actualiza los detalles de un empleado en base a su ID.
+ *     description: Actualiza los detalles de un empleado existente en la base de datos mediante su ID.
  *     parameters:
  *       - name: id
  *         in: path
  *         required: true
- *         description: ID del empleado
+ *         description: ID del empleado a actualizar
  *         schema:
  *           type: integer
  *     requestBody:
@@ -119,15 +141,20 @@ export async function GET(_req: NextRequest, { params }: any) {
  *             properties:
  *               fullname:
  *                 type: string
+ *                 example: "Tony Stark"
  *               dni:
  *                 type: string
+ *                 example: "12345678"
  *               date_of_birthday:
  *                 type: string
  *                 format: date
+ *                 example: "1970-05-29"
  *               is_developer:
- *                 type: boolean
+ *                 type: int
+ *                 example: 1
  *               description:
  *                 type: string
+ *                 example: "Ingeniero y filántropo"
  *     responses:
  *       200:
  *         description: Empleado actualizado con éxito
@@ -159,7 +186,7 @@ export async function GET(_req: NextRequest, { params }: any) {
  *                       format: date
  *                       example: "1970-05-29"
  *                     is_developer:
- *                       type: int
+ *                       type: integer
  *                       example: 1
  *                     description:
  *                       type: string
@@ -171,18 +198,40 @@ export async function GET(_req: NextRequest, { params }: any) {
  *                     updated_at:
  *                       type: string
  *                       format: date-time
- *                       example: "2025-03-06T08:57:03.073Z"
+ *                       example: "2025-03-06T08:57:03.073Z"      
  *       404:
- *         description: Empleado no encontrado
+ *         description: Empleado no encontrado con el ID proporcionado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                   example: 404
+ *                 message:
+ *                   type: string
+ *                   example: "Empleado no encontrado"
  *       500:
- *         description: Error en el servidor
+ *         description: Error en el servidor al intentar actualizar el empleado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                   example: 500
+ *                 message:
+ *                   type: string
+ *                   example: "Ocurrió un error en el servidor"
  */
+
 
 export async function PUT(req: NextRequest, { params }: any) {
   try {
     const { id } = await params;
     const employee: Employee = await req.json();
-    console.log(employee);
     await prisma.employee.update({
       where: {
         employee_id: Number(id),
@@ -308,6 +357,7 @@ export async function DELETE(_req: NextRequest, { params }: any) {
       },
     });
 
+    
     if (!employeeDeleted) {
       return NextResponse.json({
         status: 404,

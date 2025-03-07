@@ -95,10 +95,10 @@ export default function FormEmployees({ formMode, data }: Props) {
     formMode === "CREATE" ? "Registrar empleado" : "Actualizar empleado";
 
   return (
-    <div className="flex flex-col p-10 max-w-7xl mx-auto">
+    <div className="flex flex-col p-10 max-w-2xl mx-auto  rounded-xl">
       <form action="" className="flex flex-col gap-8" onSubmit={onSubmit}>
         <div className="flex flex-wrap gap-4 items-end">
-          <div className="grid w-full max-w-sm items-center gap-1.5">
+          <div className="grid w-full max-w-2xl items-center gap-1.5">
             <Label htmlFor="fullname" className="flex items-end">
               Nombre completo <span className="text-red-500">*</span>
             </Label>
@@ -111,7 +111,7 @@ export default function FormEmployees({ formMode, data }: Props) {
               {...register("fullname", { required: true, maxLength: 100 })}
             />
           </div>
-          <div className="grid w-full max-w-sm items-center gap-1.5">
+          <div className="grid w-full max-w-2xl items-center gap-1.5">
             <Label htmlFor="dni" className="flex items-end">
               DNI <span className="text-red-500">*</span>
             </Label>
@@ -128,7 +128,7 @@ export default function FormEmployees({ formMode, data }: Props) {
               })}
             />
           </div>
-          <div className="grid w-full max-w-sm items-center gap-1.5">
+          <div className="grid w-full max-w-2xl items-center gap-1.5">
             <Label htmlFor="dateOfBirthday" className="flex items-end">
               Fecha de nacimiento <span className="text-red-500">*</span>
             </Label>
@@ -140,7 +140,7 @@ export default function FormEmployees({ formMode, data }: Props) {
               {...register("date_of_birthday", { required: true })}
             />
           </div>
-          <div className="grid w-full max-w-sm items-center gap-1.5">
+          <div className="grid w-full max-w-2xl items-center gap-1.5">
             <Label htmlFor="isDeveloper" className="flex items-end">
               Desarrollador <span className="text-red-500">*</span>
             </Label>
@@ -160,7 +160,7 @@ export default function FormEmployees({ formMode, data }: Props) {
               </SelectContent>
             </Select>
           </div>
-          <div className="grid w-full max-w-sm items-center gap-1.5">
+          <div className="grid w-full max-w-2xl items-center gap-1.5">
             <Label htmlFor="description" className="flex items-end">
               Descripción <span className="text-red-500">*</span>
             </Label>
@@ -178,29 +178,29 @@ export default function FormEmployees({ formMode, data }: Props) {
           <Button
             type="submit"
             variant={"default"}
-            className="bg-yellow-400 text-black hover:bg-yellow-300 hover:cursor-pointer self-end"
+            className="bg-yellow-400 text-black hover:bg-yellow-300 hover:cursor-pointer self-start lg:self-center w-full"
           >
             {buttonTitle}
           </Button>
         )}
       </form>
-      <div className="flex w-full justify-end mt-2 gap-3">
-        <Button
-          className="min-w-32 hover:cursor-pointer hover:bg-white"
-          variant={"secondary"}
-          onClick={() => router.push("/empleados/")}
-        >
-          {formMode === "VIEW" ? "Volver" : "Cancelar"}
-        </Button>
-        {
+      <div className="flex flex-col w-full justify-start lg:justify-center mt-2 gap-3">
+      {
           formMode === "VIEW" && <Button
-          className="min-w-32 hover:cursor-pointer bg-blue-500 hover:bg-blue-200"
+          className="min-w-32 hover:cursor-pointer bg-yellow-400 hover:bg-yellow-300 text-black"
           variant={"default"}
           onClick={() => router.push(`/empleados/editar-empleado/${id}`)}
         >
           Editar empleado
         </Button>
         }
+        <Button
+          className="min-w-32 hover:cursor-pointer hover:bg-white w-full"
+          variant={"secondary"}
+          onClick={() => router.push("/empleados/")}
+        >
+          {formMode === "VIEW" ? "Volver" : "Cancelar"}
+        </Button>
       </div>
     </div>
   );

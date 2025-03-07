@@ -8,6 +8,7 @@ export const getApiDocs = async () => {
       info: {
         title: "API Documentation",
         version: "1.0",
+        description: "API Documentation sobre challenge de ingreso para el puesto de desarrollador fullstack en el gobierno de la ciudad."
       },
     },
   });
