@@ -92,7 +92,7 @@ export default function EmployeesTable() {
   };
 
   const handleNextPage = () => {
-    if (employeesData?.hasNextPage) setPage(page + 1);
+    if (employeesData?.hasNextPage && employees.length >= limit) setPage(page + 1);
   };
 
   if (isLoading) {
@@ -173,6 +173,7 @@ export default function EmployeesTable() {
                 <TableCell>
                   <Button
                     variant={"ghost"}
+                    className="hover:cursor-pointer"
                     onClick={() =>
                       router.push(`/empleados/ver-empleado/${emp.employee_id}`)
                     }
@@ -181,6 +182,7 @@ export default function EmployeesTable() {
                   </Button>
                   <Button
                     variant={"ghost"}
+                    className="hover:cursor-pointer"
                     onClick={() =>
                       router.push(
                         `/empleados/editar-empleado/${emp.employee_id}`
@@ -191,6 +193,7 @@ export default function EmployeesTable() {
                   </Button>
                   <Button
                     variant={"ghost"}
+                    className="hover:cursor-pointer"
                     onClick={() => handleDelete(emp.employee_id)}
                   >
                     <BiSolidTrashAlt color="red" />
