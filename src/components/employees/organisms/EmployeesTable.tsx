@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -58,18 +57,11 @@ export default function EmployeesTable() {
     page,
     limit,
   });
-  const [
-    deleteEmployee,
-    {
-      isLoading: isDeleteLoading,
-      isError: isDeleteError,
-      isSuccess: isDeleteSuccess,
-    },
-  ] = useDeleteEmployeeMutation();
+  const [deleteEmployee] = useDeleteEmployeeMutation();
 
   useEffect(() => {
     if (employeesData) {
-      const filteredEmployees = employeesData.data.filter(
+      const filteredEmployees = employeesData.data?.filter(
         (emp: Employee) =>
           emp.fullname.toLowerCase().includes(searchEmployee.toLowerCase()) ||
           emp.dni.toString().includes(searchEmployee)
@@ -83,6 +75,7 @@ export default function EmployeesTable() {
       await deleteEmployee(id);
       toast.success("Se ha eliminado correctamente el empleado.");
     } catch (error) {
+      console.log(error);
       toast.error("Ha ocurrido un error al eliminar el empleado.");
     }
   };
@@ -92,25 +85,26 @@ export default function EmployeesTable() {
   };
 
   const handleNextPage = () => {
-    if (employeesData?.hasNextPage && employees.length >= limit) setPage(page + 1);
+    if (employeesData?.hasNextPage && employees.length >= limit)
+      setPage(page + 1);
   };
 
   if (isLoading) {
-      return (
-        <div className="min-h-[50vh] w-full flex justify-center items-center">
-          <ThreeDots
-            visible={true}
-            height="100"
-            width="100"
-            color="#FFEB3B"
-            radius="9"
-            ariaLabel="three-dots-loading"
-            wrapperStyle={{}}
-            wrapperClass=""
-          />
-        </div>
-      );
-    }
+    return (
+      <div className="min-h-[50vh] w-full flex justify-center items-center">
+        <ThreeDots
+          visible={true}
+          height="100"
+          width="100"
+          color="#FFEB3B"
+          radius="9"
+          ariaLabel="three-dots-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col justify-start min-h-dvh gap-1">
@@ -154,8 +148,17 @@ export default function EmployeesTable() {
               ))}
             </TableRow>
           </TableHeader>
+          {employees?.length === 0 && (
+            <TableBody>
+              <TableRow>
+                <TableCell colSpan={7} className="text-md text-center">
+                  No hay resultados...
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          )}
           <TableBody>
-            {employees.map((emp) => (
+            {employees?.map((emp) => (
               <TableRow key={emp.employee_id}>
                 <TableCell>{emp.employee_id}</TableCell>
                 <TableCell>{emp.dni}</TableCell>
@@ -213,7 +216,7 @@ export default function EmployeesTable() {
             <PaginationPrevious />
           </PaginationItem>
           <PaginationItem>
-            <PaginationLink>{employeesData?.currentPage}</PaginationLink>
+            <PaginationLink>{employeesData?.currentPage ?? 1}</PaginationLink>
           </PaginationItem>
           <PaginationItem
             onClick={handleNextPage}

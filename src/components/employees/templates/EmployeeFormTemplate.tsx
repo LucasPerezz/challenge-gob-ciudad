@@ -1,10 +1,11 @@
 "use client";
 import Title from "@/components/title/Title";
-import React, { useState } from "react";
+import React from "react";
 import FormEmployees from "../organisms/FormEmployees";
 import { useGetEmployeeByIdQuery } from "@/redux/services/apiEmployees";
 import { useRouter } from "next/navigation";
 import { ThreeDots } from "react-loader-spinner";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 type Props = {
   formMode: "CREATE" | "VIEW" | "UPDATE";
@@ -21,7 +22,7 @@ export default function EmployeeFormTemplate({ formMode, id }: Props) {
 
   const router = useRouter();
 
-  const { data, isLoading, isSuccess } = useGetEmployeeByIdQuery(id);
+  const { data, isLoading, isSuccess } = useGetEmployeeByIdQuery(id ?? skipToken);
 
   if (data?.status === 404 && isSuccess) {
     router.push("/not-found");

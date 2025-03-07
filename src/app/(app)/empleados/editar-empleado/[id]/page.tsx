@@ -2,9 +2,7 @@ import EmployeeFormTemplate from "@/components/employees/templates/EmployeeFormT
 import React from "react";
 
 type Props = {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 };
 
 export default async function page({ params }: Props) {

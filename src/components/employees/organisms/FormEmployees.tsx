@@ -1,14 +1,5 @@
 "use client";
 import React, { useEffect } from "react";
-import {
-  Form,
-  FormField,
-  FormLabel,
-  FormItem,
-  FormMessage,
-  FormControl,
-  FormDescription,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { Label } from "@/components/ui/label";
@@ -24,7 +15,6 @@ import {
 import Employee from "@/entities/Employee";
 import {
   useCreateEmployeeMutation,
-  useGetEmployeeByIdQuery,
   useUpdateEmployeeMutation,
 } from "@/redux/services/apiEmployees";
 import { useParams, useRouter } from "next/navigation";
@@ -36,13 +26,7 @@ type Props = {
 };
 
 export default function FormEmployees({ formMode, data }: Props) {
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    getValues,
-    formState: { errors },
-  } = useForm({});
+  const { register, handleSubmit, setValue, getValues } = useForm({});
 
   const { id } = useParams();
   const router = useRouter();
@@ -57,36 +41,22 @@ export default function FormEmployees({ formMode, data }: Props) {
     }
   }, [data]);
 
-  const [
-    saveEmployee,
-    {
-      isError: isCreateError,
-      isSuccess: isCreateSuccess,
-      isLoading: isCreateLoading,
-    },
-  ] = useCreateEmployeeMutation();
-  const [
-    updateEmployee,
-    {
-      isError: isUpdateError,
-      isSuccess: isUpdateSuccess,
-      isLoading: isUpdateLoading,
-    },
-  ] = useUpdateEmployeeMutation();
+  const [saveEmployee] = useCreateEmployeeMutation();
+  const [updateEmployee] = useUpdateEmployeeMutation();
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      formMode === "CREATE"
-        ? saveEmployee(data).unwrap()
-        : updateEmployee({ id, ...data }).unwrap();
+      if (formMode === "CREATE") {
+        await saveEmployee(data).unwrap();
+        toast.success("Empleado registrado correctamente.");
+      } else {
+        await updateEmployee({ id, ...data }).unwrap();
+        toast.success("Empleado actualizado correctamente.");
+      }
 
-      toast.success(
-        formMode === "CREATE"
-          ? "Empleado registrado correctamente."
-          : "Empleado actualizado correctamente."
-      );
       router.push("/empleados/");
     } catch (error) {
+      console.log(error);
       toast.error("Hubo un error al registrar el empleado.");
     }
   });
@@ -185,15 +155,15 @@ export default function FormEmployees({ formMode, data }: Props) {
         )}
       </form>
       <div className="flex flex-col w-full justify-start lg:justify-center mt-2 gap-3">
-      {
-          formMode === "VIEW" && <Button
-          className="min-w-32 hover:cursor-pointer bg-yellow-400 hover:bg-yellow-300 text-black"
-          variant={"default"}
-          onClick={() => router.push(`/empleados/editar-empleado/${id}`)}
-        >
-          Editar empleado
-        </Button>
-        }
+        {formMode === "VIEW" && (
+          <Button
+            className="min-w-32 hover:cursor-pointer bg-yellow-400 hover:bg-yellow-300 text-black"
+            variant={"default"}
+            onClick={() => router.push(`/empleados/editar-empleado/${id}`)}
+          >
+            Editar empleado
+          </Button>
+        )}
         <Button
           className="min-w-32 hover:cursor-pointer hover:bg-white w-full"
           variant={"secondary"}

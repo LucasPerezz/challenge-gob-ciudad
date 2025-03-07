@@ -130,6 +130,7 @@ export async function GET(req: NextRequest) {
       hasPrevPage,
     });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({
       status: 500,
       message: "Ocurrió un error en el servidor",
@@ -242,6 +243,7 @@ export async function POST(req: NextRequest) {
       data: saveEmployee,
     });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({
       status: 500,
       message: "No se pudo crear el empleado. Inténtelo nuevamente más tarde.",

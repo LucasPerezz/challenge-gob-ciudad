@@ -5,11 +5,8 @@ import Employee from "@/entities/Employee";
 const prisma = new PrismaClient();
 
 type ParamsProps = {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 };
-
 /**
  * @swagger
  * /api/v1/employees/{id}:
@@ -92,7 +89,7 @@ type ParamsProps = {
  *                   example: "Ocurrió un error en el servidor"
  * */
 
-export async function GET(_req: NextRequest, { params }: any) {
+export async function GET(_req: NextRequest, { params }: ParamsProps) {
   try {
     const { id } = await params;
     const employee = await prisma.employee.findUnique({
@@ -110,6 +107,7 @@ export async function GET(_req: NextRequest, { params }: any) {
 
     return NextResponse.json({ status: 200, data: employee });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({
       status: 500,
       message: "Ocurrio un error en el servidor",
@@ -198,7 +196,7 @@ export async function GET(_req: NextRequest, { params }: any) {
  *                     updated_at:
  *                       type: string
  *                       format: date-time
- *                       example: "2025-03-06T08:57:03.073Z"      
+ *                       example: "2025-03-06T08:57:03.073Z"
  *       404:
  *         description: Empleado no encontrado con el ID proporcionado
  *         content:
@@ -227,8 +225,7 @@ export async function GET(_req: NextRequest, { params }: any) {
  *                   example: "Ocurrió un error en el servidor"
  */
 
-
-export async function PUT(req: NextRequest, { params }: any) {
+export async function PUT(req: NextRequest, { params }: ParamsProps) {
   try {
     const { id } = await params;
     const employee: Employee = await req.json();
@@ -251,6 +248,7 @@ export async function PUT(req: NextRequest, { params }: any) {
       message: "Empleado actualizado",
     });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({
       status: 500,
       message: "Ocurrio un error en el servidor",
@@ -348,7 +346,7 @@ export async function PUT(req: NextRequest, { params }: any) {
  *                   additionalProperties: true
  */
 
-export async function DELETE(_req: NextRequest, { params }: any) {
+export async function DELETE(_req: NextRequest, { params }: ParamsProps) {
   try {
     const { id } = await params;
     const employeeDeleted = await prisma.employee.delete({
@@ -357,7 +355,6 @@ export async function DELETE(_req: NextRequest, { params }: any) {
       },
     });
 
-    
     if (!employeeDeleted) {
       return NextResponse.json({
         status: 404,
@@ -371,10 +368,10 @@ export async function DELETE(_req: NextRequest, { params }: any) {
       data: employeeDeleted,
     });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({
       status: 500,
       message: "Ocurrio un error en el servidor",
-      error,
     });
   } finally {
     await prisma.$disconnect();
