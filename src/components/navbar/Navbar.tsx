@@ -17,6 +17,9 @@ export default function Navbar() {
           <li className="hover:text-yellow-500 font-semibold hover:cursor-pointer">
             <Link href={"/empleados"}>Empleados</Link>
           </li>
+          <li className="hover:text-yellow-500 font-semibold hover:cursor-pointer">
+            <Link href={"/api-doc"}>API Doc</Link>
+          </li>
         </ul>
       </div>
     </nav>
