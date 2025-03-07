@@ -97,7 +97,6 @@ export async function GET(_req: NextRequest, { params }: any) {
   }
 }
 
-
 /**
  * @swagger
  * /api/v1/employees/{id}:
@@ -179,7 +178,6 @@ export async function GET(_req: NextRequest, { params }: any) {
  *         description: Error en el servidor
  */
 
-
 export async function PUT(req: NextRequest, { params }: any) {
   try {
     const { id } = await params;
@@ -194,7 +192,7 @@ export async function PUT(req: NextRequest, { params }: any) {
         date_of_birthday: new Date(employee.date_of_birthday),
         description: employee.description,
         dni: employee.dni,
-        is_developer: employee.is_Developer ? 1 : 0,
+        is_developer: employee.is_developer ? 1 : 0,
         updated_at: new Date(),
       },
     });
@@ -300,7 +298,6 @@ export async function PUT(req: NextRequest, { params }: any) {
  *                   type: object
  *                   additionalProperties: true
  */
-
 
 export async function DELETE(_req: NextRequest, { params }: any) {
   try {

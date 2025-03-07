@@ -205,10 +205,10 @@ export async function POST(req: NextRequest) {
     const saveEmployee = await prisma.employee.create({
       data: {
         fullname: employee.fullname,
-        date_of_birthday: new Date(employee.dateOfBirth),
+        date_of_birthday: new Date(employee.date_of_birthday),
         description: employee.description,
         dni: employee.dni,
-        is_developer: employee.isDeveloper ? 1 : 0,
+        is_developer: employee.is_developer ? 1 : 0,
       },
     });
 

@@ -6,7 +6,7 @@ export const apiEmployees = createApi({
   tagTypes: ["employees"],
   endpoints: (builder) => ({
     getEmployees: builder.query({
-      query: ({limit, page}) => ({
+      query: ({ limit, page }) => ({
         url: `employees?limit=${limit}&page=${page}`,
         method: "GET",
       }),

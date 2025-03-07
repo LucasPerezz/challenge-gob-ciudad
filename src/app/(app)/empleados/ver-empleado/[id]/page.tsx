@@ -1,5 +1,4 @@
 import EmployeeFormTemplate from "@/components/employees/templates/EmployeeFormTemplate";
-import { useGetEmployeeByIdQuery } from "@/redux/services/apiEmployees";
 import React from "react";
 
 type Props = {

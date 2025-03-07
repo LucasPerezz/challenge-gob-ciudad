@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -9,15 +9,33 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import Employee from "@/entities/Employee";
-import { useDeleteEmployeeMutation, useGetEmployeesQuery } from "@/redux/services/apiEmployees";
+import {
+  useDeleteEmployeeMutation,
+  useGetEmployeesQuery,
+} from "@/redux/services/apiEmployees";
 import { Button } from "@/components/ui/button";
-import { BiSolidTrashAlt } from "react-icons/bi";
-import { BiEditAlt } from "react-icons/bi";
+import { BiSolidTrashAlt, BiEditAlt } from "react-icons/bi";
 import { FaPlus } from "react-icons/fa6";
 import { TiEyeOutline } from "react-icons/ti";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 
 const tableHeaders = [
   "ID",
@@ -25,40 +43,103 @@ const tableHeaders = [
   "Nombre completo",
   "Fecha de nacimiento",
   "Desarrollador",
+  "Descripcion",
   "Acciones",
 ];
 
 export default function EmployeesTable() {
-    const router = useRouter();
-    const { data: employeesData, isLoading } = useGetEmployeesQuery({});
-    const [deleteEmployee, {isLoading: isDeleteLoading, isError: isDeleteError, isSuccess: isDeleteSuccess}] = useDeleteEmployeeMutation();
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [searchEmployee, setSearchEmployee] = useState("");
+  const router = useRouter();
+  const { data: employeesData, isLoading } = useGetEmployeesQuery({
+    page,
+    limit,
+  });
+  const [
+    deleteEmployee,
+    {
+      isLoading: isDeleteLoading,
+      isError: isDeleteError,
+      isSuccess: isDeleteSuccess,
+    },
+  ] = useDeleteEmployeeMutation();
 
-    const handleDelete = (id?: number) => {
-        deleteEmployee(id);
-        if(isDeleteError) {
-            toast.error("Ha ocurrido un error al eliminar el empleado.")
-        }
-
-        if(isDeleteSuccess) {
-            toast.success("Se ha eliminado correctamente el empleado.")
-        }
+  useEffect(() => {
+    if (employeesData) {
+      const filteredEmployees = employeesData.data.filter(
+        (emp: Employee) =>
+          emp.fullname.toLowerCase().includes(searchEmployee.toLowerCase()) ||
+          emp.dni.toString().includes(searchEmployee)
+      );
+      setEmployees(filteredEmployees);
     }
+  }, [employeesData, searchEmployee]);
 
+  const handleDelete = async (id?: number) => {
+    try {
+      await deleteEmployee(id);
+      toast.success("Se ha eliminado correctamente el empleado.");
+    } catch (error) {
+      toast.error("Ha ocurrido un error al eliminar el empleado.");
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (employeesData?.hasPrevPage) setPage(page - 1);
+  };
+
+  const handleNextPage = () => {
+    if (employeesData?.hasNextPage) setPage(page + 1);
+  };
+
+  console.log(employees);
 
   return (
-    <div className="flex flex-col gap-1">
-        <div className="w-full flex justify-end"><Button className="flex items-center gap-1 bg-yellow-500 hover:cursor-pointer" onClick={() => router.push('/empleados/nuevo-empleado')}><FaPlus />Crear empleado</Button></div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {tableHeaders.map((t) => (
-              <TableHead key={t}>{t}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {employeesData?.data?.map((emp: Employee) => {
-            return (
+    <div className="flex flex-col justify-start min-h-dvh gap-1">
+      <div className="flex flex-col gap-8 w-full">
+        <div className="w-full flex gap-2 justify-between items-end">
+          <Input
+            placeholder="Buscar empleado por nombre o DNI..."
+            value={searchEmployee ?? ""}
+            onChange={(e) => setSearchEmployee(e.target.value)}
+            className="max-w-md"
+          />
+          <div className="flex gap-3 items-end">
+            <div className="flex flex-col gap-2 items-center">
+              <p className="text-sm font-semibold">Empleados por página</p>
+              <Select onValueChange={(value) => setLimit(Number(value))}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder={limit.toString()} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="5">5</SelectItem>
+                  <SelectItem value="10">10</SelectItem>
+                  <SelectItem value="20">20</SelectItem>
+                  <SelectItem value="50">50</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Button
+              className="flex items-center gap-1 bg-yellow-500 hover:cursor-pointer"
+              onClick={() => router.push("/empleados/nuevo-empleado")}
+            >
+              <FaPlus />
+              Nuevo empleado
+            </Button>
+          </div>
+        </div>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              {tableHeaders.map((t) => (
+                <TableHead key={t}>{t}</TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {employees.map((emp) => (
               <TableRow key={emp.employee_id}>
                 <TableCell>{emp.employee_id}</TableCell>
                 <TableCell>{emp.dni}</TableCell>
@@ -71,23 +152,58 @@ export default function EmployeesTable() {
                     .reverse()
                     .join("-")}
                 </TableCell>
-                <TableCell>{emp.is_Developer === 1 ? "Si" : "No"}</TableCell>
+                <TableCell>{emp.is_developer === 1 ? "Si" : "No"}</TableCell>
+                <TableCell>{emp.description}</TableCell>
                 <TableCell>
-                  <Button variant={"ghost"} onClick={() => router.push(`/empleados/ver-empleado/${emp.employee_id}`)}>
+                  <Button
+                    variant={"ghost"}
+                    onClick={() =>
+                      router.push(`/empleados/ver-empleado/${emp.employee_id}`)
+                    }
+                  >
                     <TiEyeOutline color="green" />
                   </Button>
-                  <Button variant={"ghost"} onClick={() => router.push(`/empleados/editar-empleado/${emp.employee_id}`)}>
+                  <Button
+                    variant={"ghost"}
+                    onClick={() =>
+                      router.push(
+                        `/empleados/editar-empleado/${emp.employee_id}`
+                      )
+                    }
+                  >
                     <BiEditAlt color="blue" />
                   </Button>
-                  <Button variant={"ghost"} onClick={() => handleDelete(emp.employee_id)}>
+                  <Button
+                    variant={"ghost"}
+                    onClick={() => handleDelete(emp.employee_id)}
+                  >
                     <BiSolidTrashAlt color="red" />
                   </Button>
                 </TableCell>
               </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      <Pagination className="mt-12">
+        <PaginationContent>
+          <PaginationItem
+            onClick={handlePreviousPage}
+            className="hover:cursor-pointer"
+          >
+            <PaginationPrevious />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink>{employeesData?.currentPage}</PaginationLink>
+          </PaginationItem>
+          <PaginationItem
+            onClick={handleNextPage}
+            className="hover:cursor-pointer"
+          >
+            <PaginationNext />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 }

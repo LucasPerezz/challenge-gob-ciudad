@@ -1,8 +1,9 @@
 "use client";
 import Title from "@/components/title/Title";
-import React from "react";
+import React, { useState } from "react";
 import FormEmployees from "../organisms/FormEmployees";
 import { useGetEmployeeByIdQuery } from "@/redux/services/apiEmployees";
+import { useRouter } from "next/navigation";
 
 type Props = {
   formMode: "CREATE" | "VIEW" | "UPDATE";
@@ -17,12 +18,16 @@ export default function EmployeeFormTemplate({ formMode, id }: Props) {
       ? "Registrar empleado"
       : `Actualizar empleado`;
 
-  const {
-    data, isLoading
-  } = useGetEmployeeByIdQuery(id);
+  const router = useRouter();
 
-  if(isLoading) {
-    return <p>Cargando...</p>
+  const { data, isLoading, isSuccess } = useGetEmployeeByIdQuery(id);
+
+  if (data?.status === 404 && isSuccess) {
+    router.push("/not-found");
+  }
+
+  if (isLoading) {
+    return <p>Cargando...</p>;
   }
 
   return (

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Form,
   FormField,
@@ -42,31 +42,20 @@ export default function FormEmployees({ formMode, data }: Props) {
     setValue,
     getValues,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      fullname: data?.fullname,
-      dni: data?.dni,
-      is_developer: data?.is_Developer,
-      description: data?.description,
-      date_of_birthday: data?.date_of_birthday
-    }
-  });
+  } = useForm({});
 
   const { id } = useParams();
   const router = useRouter();
 
   useEffect(() => {
-    if(data) {
+    if (data) {
       setValue("fullname", data.fullname);
       setValue("dni", data.dni);
-      setValue("is_developer", data.is_Developer);
+      setValue("is_developer", data.is_developer);
       setValue("description", data.description);
-      setValue("date_of_birthday", data.date_of_birthday)
+      setValue("date_of_birthday", data.date_of_birthday.split("T")[0]);
     }
   }, [data]);
-  
-
-  console.log(id);
 
   const [
     saveEmployee,
@@ -105,10 +94,6 @@ export default function FormEmployees({ formMode, data }: Props) {
   const buttonTitle =
     formMode === "CREATE" ? "Registrar empleado" : "Actualizar empleado";
 
-    console.log(getValues())
-
-    
-
   return (
     <div className="flex flex-col p-10 max-w-7xl mx-auto">
       <form action="" className="flex flex-col gap-8" onSubmit={onSubmit}>
@@ -142,7 +127,6 @@ export default function FormEmployees({ formMode, data }: Props) {
                 min: 10000000,
               })}
             />
-            
           </div>
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="dateOfBirthday" className="flex items-end">
@@ -150,12 +134,10 @@ export default function FormEmployees({ formMode, data }: Props) {
             </Label>
             <Input
               type="date"
-              id="dateOfBirth"
-              placeholder="20/04/2001"
+              id="date_of_birthday"
               disabled={formMode === "VIEW"}
               required
               {...register("date_of_birthday", { required: true })}
-              value={getValues("date_of_birthday")?.toString().split('T')[0]}
             />
           </div>
           <div className="grid w-full max-w-sm items-center gap-1.5">
@@ -165,23 +147,22 @@ export default function FormEmployees({ formMode, data }: Props) {
             <Select
               disabled={formMode === "VIEW"}
               required
-              onValueChange={(value) =>
-                setValue("is_developer", value === "Si" ? 1 : 0)
-              }
+              onValueChange={(value) => setValue("is_developer", Number(value))}
               {...register("is_developer")}
+              defaultValue={getValues("is_developer") === 1 ? "1" : "0"}
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Seleccione una opción" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Si">Sí</SelectItem>
-                <SelectItem value="No">No</SelectItem>
+                <SelectItem value="1">Sí</SelectItem>
+                <SelectItem value="0">No</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="description" className="flex items-end">
-              Descripcion <span className="text-red-500">*</span>
+              Descripción <span className="text-red-500">*</span>
             </Label>
             <Input
               type="text"
@@ -193,23 +174,25 @@ export default function FormEmployees({ formMode, data }: Props) {
             />
           </div>
         </div>
-        <div className="flex gap-3 w-full justify-end">
+        {formMode !== "VIEW" && (
           <Button
-            className="min-w-32 hover:cursor-pointer hover:bg-white"
-            variant={"secondary"}
+            type="submit"
+            variant={"default"}
+            className="bg-yellow-400 text-black hover:bg-yellow-300 hover:cursor-pointer self-end"
           >
-            Cancelar
+            {buttonTitle}
           </Button>
-          {formMode !== "VIEW" && (
-            <Button
-              variant={"default"}
-              className="bg-yellow-400 text-black hover:bg-yellow-300 hover:cursor-pointer"
-            >
-              {buttonTitle}
-            </Button>
-          )}
-        </div>
+        )}
       </form>
+      <div className="flex w-full justify-end mt-4">
+        <Button
+          className="min-w-32 hover:cursor-pointer hover:bg-white"
+          variant={"secondary"}
+          onClick={() => router.push("/empleados/")}
+        >
+          Cancelar
+        </Button>
+      </div>
     </div>
   );
 }
