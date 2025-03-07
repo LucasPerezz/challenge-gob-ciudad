@@ -36,6 +36,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { ThreeDots } from "react-loader-spinner";
 
 const tableHeaders = [
   "ID",
@@ -94,7 +95,22 @@ export default function EmployeesTable() {
     if (employeesData?.hasNextPage) setPage(page + 1);
   };
 
-  console.log(employees);
+  if (isLoading) {
+      return (
+        <div className="min-h-[50vh] w-full flex justify-center items-center">
+          <ThreeDots
+            visible={true}
+            height="100"
+            width="100"
+            color="#FFEB3B"
+            radius="9"
+            ariaLabel="three-dots-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+          />
+        </div>
+      );
+    }
 
   return (
     <div className="flex flex-col justify-start min-h-dvh gap-1">

@@ -184,14 +184,23 @@ export default function FormEmployees({ formMode, data }: Props) {
           </Button>
         )}
       </form>
-      <div className="flex w-full justify-end mt-4">
+      <div className="flex w-full justify-end mt-2 gap-3">
         <Button
           className="min-w-32 hover:cursor-pointer hover:bg-white"
           variant={"secondary"}
           onClick={() => router.push("/empleados/")}
         >
-          Cancelar
+          {formMode === "VIEW" ? "Volver" : "Cancelar"}
         </Button>
+        {
+          formMode === "VIEW" && <Button
+          className="min-w-32 hover:cursor-pointer bg-blue-500 hover:bg-blue-200"
+          variant={"default"}
+          onClick={() => router.push(`/empleados/editar-empleado/${id}`)}
+        >
+          Editar empleado
+        </Button>
+        }
       </div>
     </div>
   );

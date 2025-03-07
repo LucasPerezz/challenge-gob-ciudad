@@ -16,10 +16,10 @@ export default function Navbar() {
 
         <ul className="flex gap-8">
           <li className="hover:text-yellow-500 font-semibold hover:cursor-pointer">
-            <Link href={"/empleados"}>Empleados</Link>
+            <Link href={"/"}>Inicio</Link>
           </li>
           <li className="hover:text-yellow-500 font-semibold hover:cursor-pointer">
-            <Link href={"/"}>Portal</Link>
+            <Link href={"/empleados"}>Empleados</Link>
           </li>
         </ul>
       </div>
