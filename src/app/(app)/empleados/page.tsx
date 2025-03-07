@@ -1,12 +1,12 @@
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
-import React from 'react'
+import EmployeeListTemplate from "@/components/employees/templates/EmployeeListTemplate";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import React from "react";
 
 export default function page() {
   return (
     <>
-    <div>Pagina empleados</div>
-    <Button><Link href={'/empleados/nuevo-empleado'}>Crear empleado</Link></Button>
+      <EmployeeListTemplate />
     </>
-  )
+  );
 }

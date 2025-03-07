@@ -1,7 +1,8 @@
 export default interface Employee {
     fullname: string;
     dni: string;
-    dateOfBirth: Date;
-    isDeveloper: number;
+    date_of_birthday: Date;
+    is_Developer: number;
     description: string;
+    employee_id?: number;
 }

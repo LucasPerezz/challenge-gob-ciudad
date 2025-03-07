@@ -184,31 +184,24 @@ export async function PUT(req: NextRequest, { params }: any) {
   try {
     const { id } = await params;
     const employee: Employee = await req.json();
-    const employeeUpdated = await prisma.employee.update({
+    console.log(employee);
+    await prisma.employee.update({
       where: {
         employee_id: Number(id),
       },
       data: {
         fullname: employee.fullname,
-        date_of_birthday: new Date(employee.dateOfBirth),
+        date_of_birthday: new Date(employee.date_of_birthday),
         description: employee.description,
         dni: employee.dni,
-        is_developer: employee.isDeveloper ? 1 : 0,
+        is_developer: employee.is_Developer ? 1 : 0,
         updated_at: new Date(),
       },
     });
 
-    if (!employeeUpdated) {
-      return NextResponse.json({
-        status: 404,
-        message: "Empleado no encontrado",
-      });
-    }
-
     return NextResponse.json({
       status: 200,
       message: "Empleado actualizado",
-      data: employeeUpdated,
     });
   } catch (error) {
     return NextResponse.json({

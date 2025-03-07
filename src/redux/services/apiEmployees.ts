@@ -29,7 +29,7 @@ export const apiEmployees = createApi({
     }),
     updateEmployee: builder.mutation({
       query: ({ id, ...data }) => ({
-        url: `employee/${id}`,
+        url: `employees/${id}`,
         method: "PUT",
         body: data,
       }),
@@ -37,7 +37,7 @@ export const apiEmployees = createApi({
     }),
     deleteEmployee: builder.mutation({
       query: (id) => ({
-        url: `employee/${id}`,
+        url: `employees/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["employees"],

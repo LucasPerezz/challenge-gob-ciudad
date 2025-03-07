@@ -18,8 +18,12 @@ export default function EmployeeFormTemplate({ formMode, id }: Props) {
       : `Actualizar empleado`;
 
   const {
-    data,
+    data, isLoading
   } = useGetEmployeeByIdQuery(id);
+
+  if(isLoading) {
+    return <p>Cargando...</p>
+  }
 
   return (
     <div className="container mx-auto mt-10">
