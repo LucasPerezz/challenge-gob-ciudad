@@ -1,4 +1,3 @@
-
 # Challenge de inicio - Lucas Perez
 
 Challenge de inicio para el puesto de Desarrollador Fullstack Jr en el Gobierno de La Ciudad
@@ -27,6 +26,7 @@ cd ./challenge-gob-ciudad
 ```
 
 ### 2. Instalar dependencias
+
 Segundo, en su terminal ejecute el siguiente comando:
 
 ```bash
@@ -42,6 +42,7 @@ DATABASE_URL=mysql://<user>:<password>@localhost:<port>/<nombre_base_de_datos>
 ```
 
 ### 4. Migrar prisma a base de datos
+
 Cuarto, debe ejecutar el siguiente comando en la terminal
 
 ```
@@ -64,12 +65,54 @@ Si no hay migraciones y el proyecto está usando el esquema inicial, puedes gene
 
 ### 6. Verificar funcionamiento
 
-Como ultimo paso, ingrese a su navegador y coloque la siguiente url en el buscador: 
+Como ultimo paso, ingrese a su navegador y coloque la siguiente url en el buscador:
 
 ```
 http://localhost:3000
 ```
 
+## Documentacion del proyecto
+https://drive.google.com/file/d/193ReP281WriehwXIu3W-ja0PUS1Q30Mx/view?usp=sharing
 
+## Consultas SQL para la creacion
 
+Crear base de datos
 
+```
+    create database employee_managment
+```
+
+Usar base de datos
+
+```
+    use employee_managment
+```
+
+Crear tabla
+
+```
+create table employee (
+	employee_id int auto_increment primary key,
+    fullname varchar(100) not null,
+    dni varchar(100) not null,
+    date_of_birthday date not null,
+    is_developer tinyint not null,
+    description varchar(255) not null,
+    created_at timestamp default current_timestamp,
+    updated_at timestamp default current_timestamp on update current_timestamp,
+    deleted_at timestamp default null
+)
+```
+
+Agregar elemento de prueba
+
+```
+insert into employee (fullname, dni, date_of_birthday, is_developer, description) values
+('Lucas Perez', '12345678', '2000-09-26', 1, 'Desarrollador Full Stack')
+```
+
+Obtener elementos
+
+```
+select * from employeeis_developer
+```
