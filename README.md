@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# Challenge de inicio - Lucas Perez
 
-First, run the development server:
+Challenge de inicio para el puesto de Desarrollador Fullstack Jr en el Gobierno de La Ciudad
+
+## Requisitos previos
+
+Antes de comenzar, asegúrate de tener instaladas las siguientes herramientas:
+
+- **Node.js**
+- **npm**
+- **Base de datos** (MySQL)
+
+Si no tienes Node.js o npm instalados, puedes descargarlos desde [nodejs.org](https://nodejs.org/).
+
+## Pasos para ejecutar el proyecto
+
+Sigue estos pasos para ejecutar el proyecto en tu máquina local.
+
+### 1. Clonar el repositorio
+
+Primero, debes clonar el repositorio en tu máquina local. Abre tu terminal y ejecuta el siguiente comando:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/LucasPerezz/challenge-gob-ciudad.git
+cd ./challenge-gob-ciudad
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Instalar dependencias
+Segundo, en su terminal ejecute el siguiente comando:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 3. Configure su archivo .env
 
-## Learn More
+Tercero, es necesario que en su archivo .env cree una variable de entorno con el siguiente formato
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+DATABASE_URL=mysql://<user>:<password>@localhost:<port>/<nombre_base_de_datos>
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4. Migrar prisma a base de datos
+Cuarto, debe ejecutar el siguiente comando en la terminal
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+    npx prisma migrate dev
+```
 
-## Deploy on Vercel
+Este comando aplica las migraciones y crea las tablas de la base de datos según el esquema definido en prisma/schema.prisma
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Si no hay migraciones y el proyecto está usando el esquema inicial, puedes generar el cliente de Prisma:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+    npx prisma generate
+```
+
+### 5. Iniciar el servidor de desarrollo
+
+```
+    npm run dev
+```
+
+### 6. Verificar funcionamiento
+
+Como ultimo paso, ingrese a su navegador y coloque la siguiente url en el buscador: 
+
+```
+http://localhost:3000
+```
+
+
+
+
